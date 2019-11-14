@@ -1,11 +1,18 @@
-import React, {useCallback, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from 'axios';
 
-const Login = () => {
+const Login = (props) => {
     const [values, setValues] = useState({
         username: '',
         password: ''
     });
+
+    useEffect(()=> {
+        const token = JSON.parse(localStorage.getItem('bubbles'));
+        if (token) {
+            props.history.push('/bubbles')
+        }
+    }, [])
 
     function handleChange({target: {name, value}}) {
         setValues({...values, [name]: value});
@@ -15,7 +22,10 @@ const Login = () => {
         event.preventDefault();
         axios
             .post('http://localhost:5000/api/login', values)
-            .then(res => localStorage.setItem('bubbles', JSON.stringify(res.data.payload)))
+            .then(res => {
+                localStorage.setItem('bubbles', JSON.stringify(res.data.payload))
+                props.history.push('/bubbles')
+            })
             .catch(err => console.log(err.response));
     }
     // make a post request to retrieve a token from the api
