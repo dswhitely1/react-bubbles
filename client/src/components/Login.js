@@ -15,7 +15,7 @@ const Login = () => {
         event.preventDefault();
         axios
             .post('http://localhost:5000/api/login', values)
-            .then(res => console.log(res.data))
+            .then(res => localStorage.setItem('bubbles', JSON.stringify(res.data.payload)))
             .catch(err => console.log(err.response));
     }
     // make a post request to retrieve a token from the api
